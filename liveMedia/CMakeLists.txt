@@ -26,8 +26,3 @@ target_include_directories(liveMedia
         PUBLIC include
         PUBLIC ../UsageEnvironment/include
         PUBLIC ../groupsock/include)
-
-
-#-O -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1 FileServerMediaSubsession.cpp
-#c++ -c -Iinclude -I../UsageEnvironment/include -I../groupsock/include -I/usr/local/include -I. -O -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1 MPEG4VideoFileServerMediaSubsession.cpp
-#c++ -c -Iinclude -I../UsageEnvironment/include -I../groupsock/include -I/usr/local/include -I. -O -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1 
