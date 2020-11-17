@@ -1,0 +1,26 @@
+#This should be the first line of the CMakeLists.txt
+cmake_minimum_required(VERSION 3.2)
+
+# Poor practice, but very common
+project(live555 VERSION 4.7.2)
+
+
+file(GLOB USER_LIBS_FILE ./*.cpp)
+
+add_library(UsageEnvironment 
+        STATIC
+        ${USER_LIBS_FILE})
+
+add_definitions("-Wall -g")
+add_definitions("-std=c++11 -O -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1")
+#add_compile_options(-std=c++11 -O -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1)
+
+target_include_directories(UsageEnvironment 
+        PUBLIC .
+        PUBLIC include
+        PUBLIC ../groupsock/include)
+
+
+#-O -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1 FileServerMediaSubsession.cpp
+#c++ -c -Iinclude -I../UsageEnvironment/include -I../groupsock/include -I/usr/local/include -I. -O -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1 MPEG4VideoFileServerMediaSubsession.cpp
+#c++ -c -Iinclude -I../UsageEnvironment/include -I../groupsock/include -I/usr/local/include -I. -O -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1 
