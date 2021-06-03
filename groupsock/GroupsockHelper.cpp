@@ -304,7 +304,7 @@ int setupStreamSocket(UsageEnvironment& env,
   if (port.num() != 0 || ReceivingInterfaceAddr != INADDR_ANY) {
 #endif
     MAKE_SOCKADDR_IN(name, ReceivingInterfaceAddr, port.num());
-    if (bind(newSocket, (struct sockaddr*)&name, sizeof name) != 0) {
+    if (bind(newSocket, (struct sockaddr*)&name, sizeof name) != 0) {// 端口为554的时候， 这里进行bind会失败
       char tmpBuffer[100];
       sprintf(tmpBuffer, "bind() error (port number: %d): ",
 	      ntohs(port.num()));

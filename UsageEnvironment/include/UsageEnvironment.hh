@@ -88,7 +88,7 @@ public:
 
   // a pointer to additional, optional, client-specific state
   void* liveMediaPriv;
-  void* groupsockPriv;
+  void* groupsockPriv;  //_ _groupsockPriv
 
 protected:
   UsageEnvironment(TaskScheduler& scheduler); // abstract base class
