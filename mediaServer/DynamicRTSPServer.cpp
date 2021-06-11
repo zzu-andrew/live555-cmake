@@ -20,14 +20,14 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 
 #include "DynamicRTSPServer.hh"
 #include <liveMedia.hh>
-#include <string.h>
+#include <cstring>
 
 DynamicRTSPServer*
 DynamicRTSPServer::createNew(UsageEnvironment& env, Port ourPort,
 			     UserAuthenticationDatabase* authDatabase,
 			     unsigned reclamationTestSeconds) {
   int ourSocket = setUpOurSocket(env, ourPort);
-  if (ourSocket == -1) return NULL;
+  if (ourSocket == -1) return nullptr;
 
   return new DynamicRTSPServer(env, ourSocket, ourPort, authDatabase, reclamationTestSeconds);
 }
@@ -38,8 +38,7 @@ DynamicRTSPServer::DynamicRTSPServer(UsageEnvironment& env, int ourSocket,
   : RTSPServer(env, ourSocket, ourPort, authDatabase, reclamationTestSeconds) {
 }
 
-DynamicRTSPServer::~DynamicRTSPServer() {
-}
+DynamicRTSPServer::~DynamicRTSPServer() = default;
 
 static ServerMediaSession* createNewSMS(UsageEnvironment& env,
 					char const* fileName, FILE* fid); // forward
@@ -48,30 +47,30 @@ ServerMediaSession* DynamicRTSPServer
 ::lookupServerMediaSession(char const* streamName, Boolean isFirstLookupInSession) {
   // First, check whether the specified "streamName" exists as a local file:
   FILE* fid = fopen(streamName, "rb");
-  Boolean const fileExists = fid != NULL;
+  Boolean const fileExists = fid != nullptr;
 
   // Next, check whether we already have a "ServerMediaSession" for this file:
   ServerMediaSession* sms = RTSPServer::lookupServerMediaSession(streamName);
-  Boolean const smsExists = sms != NULL;
+  Boolean const smsExists = sms != nullptr;
 
   // Handle the four possibilities for "fileExists" and "smsExists":
   if (!fileExists) {
     if (smsExists) {
       // "sms" was created for a file that no longer exists. Remove it:
       removeServerMediaSession(sms);
-      sms = NULL;
+      sms = nullptr;
     }
 
-    return NULL;
+    return nullptr;
   } else {
     if (smsExists && isFirstLookupInSession) { 
       // Remove the existing "ServerMediaSession" and create a new one, in case the underlying
       // file has changed in some way:
       removeServerMediaSession(sms); 
-      sms = NULL;
+      sms = nullptr;
     } 
 
-    if (sms == NULL) {
+    if (sms == nullptr) {
       sms = createNewSMS(envir(), streamName, fid); 
       addServerMediaSession(sms);
     }
@@ -115,9 +114,9 @@ static ServerMediaSession* createNewSMS(UsageEnvironment& env,
 					char const* fileName, FILE* /*fid*/) {
   // Use the file name extension to determine the type of "ServerMediaSession":
   char const* extension = strrchr(fileName, '.');
-  if (extension == NULL) return NULL;
+  if (extension == nullptr) return nullptr;
 
-  ServerMediaSession* sms = NULL;
+  ServerMediaSession* sms = nullptr;
   Boolean const reuseSource = False;
   if (strcmp(extension, ".aac") == 0) {
     // Assumed to be an AAC Audio (ADTS format) file:
@@ -155,7 +154,7 @@ static ServerMediaSession* createNewSMS(UsageEnvironment& env,
     // (For more information about ADUs and interleaving,
     //  see <http://www.live555.com/rtp-mp3/>)
     Boolean useADUs = False;
-    Interleaving* interleaving = NULL;
+    Interleaving* interleaving = nullptr;
 #ifdef STREAM_USING_ADUS
     useADUs = True;
 #ifdef INTERLEAVE_ADUS
@@ -216,7 +215,7 @@ static ServerMediaSession* createNewSMS(UsageEnvironment& env,
     env.taskScheduler().doEventLoop(&creationState.watchVariable);
 
     ServerMediaSubsession* smss;
-    while ((smss = creationState.demux->newServerMediaSubsession()) != NULL) {
+    while ((smss = creationState.demux->newServerMediaSubsession()) != nullptr) {
       sms->addSubsession(smss);
     }
   } else if (strcmp(extension, ".ogg") == 0 || strcmp(extension, ".ogv") == 0 || strcmp(extension, ".opus") == 0) {
@@ -231,7 +230,7 @@ static ServerMediaSession* createNewSMS(UsageEnvironment& env,
     env.taskScheduler().doEventLoop(&creationState.watchVariable);
 
     ServerMediaSubsession* smss;
-    while ((smss = creationState.demux->newServerMediaSubsession()) != NULL) {
+    while ((smss = creationState.demux->newServerMediaSubsession()) != nullptr) {
       sms->addSubsession(smss);
     }
   }
