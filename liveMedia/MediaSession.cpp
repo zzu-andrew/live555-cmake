@@ -788,8 +788,8 @@ Boolean MediaSubsession::initiate(int useSpecialRTPoffset) {
 	// To be usable for RTP, the client port number must be even:
 	if ((fClientPortNum&1) != 0) { // it's odd
 	  // Record this socket in our table, and keep trying:
-	  unsigned key = (unsigned)fClientPortNum;
-	  Groupsock* existing = (Groupsock*)socketHashTable->Add((char const*)key, fRTPSocket);
+	  auto key = (unsigned)fClientPortNum;
+	  auto* existing = (Groupsock*)socketHashTable->Add((char const*)key, fRTPSocket);
 	  delete existing; // in case it wasn't NULL
 	  continue;
 	}
@@ -1164,7 +1164,7 @@ Boolean MediaSubsession::parseSDPAttribute_fmtp(char const* sdpLine) {
     }
     delete[] nameStr; delete[] valueStr;
     return True;
-  } while (0);
+  } while (false);
 
   return False;
 }

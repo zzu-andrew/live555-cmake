@@ -254,9 +254,9 @@ char* generateVorbisOrTheoraConfigStr(u_int8_t* identificationHeader, unsigned i
     }
   }
   // Copy each header:
-  if (identificationHeader != NULL) memmove(p, identificationHeader, identificationHeaderSize); p += identificationHeaderSize;
-  if (commentHeader != NULL) memmove(p, commentHeader, commentHeaderSize); p += commentHeaderSize;
-  if (setupHeader != NULL) memmove(p, setupHeader, setupHeaderSize);
+  if (identificationHeader != nullptr) memmove(p, identificationHeader, identificationHeaderSize); p += identificationHeaderSize;
+  if (commentHeader != nullptr) memmove(p, commentHeader, commentHeaderSize); p += commentHeaderSize;
+  if (setupHeader != nullptr) memmove(p, setupHeader, setupHeaderSize);
   
   // Having set up the 'packed configuration headers', Base-64-encode this, for our result:
   char* base64PackedHeaders = base64Encode((char const*)packedHeaders, packedHeadersSize);

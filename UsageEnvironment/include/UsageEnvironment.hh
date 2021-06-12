@@ -140,7 +140,7 @@ public:
   virtual void moveSocketHandling(int oldSocketNum, int newSocketNum) = 0;
         // Changes any socket handling for "oldSocketNum" so that occurs with "newSocketNum" instead.
 
-  virtual void doEventLoop(char volatile* watchVariable = NULL) = 0;
+  virtual void doEventLoop(char volatile* watchVariable = nullptr) = 0;
       // Causes further execution to take place within the event loop.
       // Delayed tasks, background I/O handling, and other events are handled, sequentially (as a single thread of control).
       // (If "watchVariable" is not NULL, then we return from this routine when *watchVariable != 0)
@@ -150,7 +150,7 @@ public:
       // (Returns 0 iff no such trigger can be created (e.g., because of implementation limits on the number of triggers).)
   virtual void deleteEventTrigger(EventTriggerId eventTriggerId) = 0;
 
-  virtual void triggerEvent(EventTriggerId eventTriggerId, void* clientData = NULL) = 0;
+  virtual void triggerEvent(EventTriggerId eventTriggerId, void* clientData = nullptr) = 0;
       // Causes the (previously-registered) handler function for the specified event to be handled (from the event loop).
       // The handler function is called with "clientData" as parameter.
       // Note: This function (unlike other library functions) may be called from an external thread
