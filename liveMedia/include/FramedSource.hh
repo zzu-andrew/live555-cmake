@@ -65,8 +65,8 @@ public:
       // frame has been read (*iff* it is read successfully)
 
 protected:
-  FramedSource(UsageEnvironment& env); // abstract base class
-  virtual ~FramedSource();
+  explicit FramedSource(UsageEnvironment& env); // abstract base class
+  ~FramedSource() override;
 
   virtual void doStopGettingFrames();
 
