@@ -81,7 +81,7 @@ protected:
 
 private:
   // redefined virtual functions:
-  virtual Boolean isFramedSource() const;
+  Boolean isFramedSource() const override;
 
 private:
   afterGettingFunc* fAfterGettingFunc;

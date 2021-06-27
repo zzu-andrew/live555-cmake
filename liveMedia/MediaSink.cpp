@@ -61,7 +61,7 @@ Boolean MediaSink::startPlaying(MediaSource& source,
 				afterPlayingFunc* afterFunc,
 				void* afterClientData) {
   // Make sure we're not already being played:
-  if (fSource != NULL) {
+  if (fSource != nullptr) {
     envir().setResultMsg("This sink is already being played");
     return False;
   }

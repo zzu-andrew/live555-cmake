@@ -32,14 +32,15 @@ FileSink::FileSink(UsageEnvironment& env, FILE* fid, unsigned bufferSize,
 		   char const* perFrameFileNamePrefix)
   : MediaSink(env), fOutFid(fid), fBufferSize(bufferSize), fSamePresentationTimeCounter(0) {
   fBuffer = new unsigned char[bufferSize];
-  if (perFrameFileNamePrefix != NULL) {
+  if (perFrameFileNamePrefix != nullptr) {
     fPerFrameFileNamePrefix = strDup(perFrameFileNamePrefix);
     fPerFrameFileNameBuffer = new char[strlen(perFrameFileNamePrefix) + 100];
   } else {
-    fPerFrameFileNamePrefix = NULL;
-    fPerFrameFileNameBuffer = NULL;
+    fPerFrameFileNamePrefix = nullptr;
+    fPerFrameFileNameBuffer = nullptr;
   }
-  fPrevPresentationTime.tv_sec = ~0; fPrevPresentationTime.tv_usec = 0;
+  fPrevPresentationTime.tv_sec = ~0;
+  fPrevPresentationTime.tv_usec = 0;
 }
 
 FileSink::~FileSink() {
@@ -66,9 +67,9 @@ FileSink* FileSink::createNew(UsageEnvironment& env, char const* fileName,
     }
 
     return new FileSink(env, fid, bufferSize, perFrameFileNamePrefix);
-  } while (0);
+  } while (false);
 
-  return NULL;
+  return nullptr;
 }
 
 Boolean FileSink::continuePlaying() {
