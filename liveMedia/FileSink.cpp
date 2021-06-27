@@ -56,13 +56,13 @@ FileSink* FileSink::createNew(UsageEnvironment& env, char const* fileName,
     char const* perFrameFileNamePrefix;
     if (oneFilePerFrame) {
       // Create the fid for each frame
-      fid = NULL;
+      fid = nullptr;
       perFrameFileNamePrefix = fileName;
     } else {
       // Normal case: create the fid once
       fid = OpenOutputFile(env, fileName);
-      if (fid == NULL) break;
-      perFrameFileNamePrefix = NULL;
+      if (fid == nullptr) break;
+      perFrameFileNamePrefix = nullptr;
     }
 
     return new FileSink(env, fid, bufferSize, perFrameFileNamePrefix);

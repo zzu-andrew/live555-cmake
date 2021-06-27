@@ -9,13 +9,13 @@ add_subdirectory(liveMedia)
 add_subdirectory(groupsock)
 add_subdirectory(BasicUsageEnvironment)
 add_subdirectory(UsageEnvironment)
-
+add_subdirectory(demo)
 
 file(GLOB USER_LIBS_FILE ./mediaServer/*.cpp)
 add_executable(live555MediaServer
         ${USER_LIBS_FILE})   
 
-add_definitions("-std=c++11 -O -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1")
+add_definitions("-std=c++11 -O0 -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1")
 #add_compile_options(-std=c++11 -O -DSOCKLEN_T=socklen_t -g -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Wall -DBSD=1)
 
 target_link_libraries(live555MediaServer
