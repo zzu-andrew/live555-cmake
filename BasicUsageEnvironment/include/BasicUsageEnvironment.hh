@@ -62,10 +62,10 @@ protected:
 
 protected:
   // Redefined virtual functions:
-  virtual void SingleStep(unsigned maxDelayTime);
+  void SingleStep(unsigned maxDelayTime) override;
 
-  virtual void setBackgroundHandling(int socketNum, int conditionSet, BackgroundHandlerProc* handlerProc, void* clientData);
-  virtual void moveSocketHandling(int oldSocketNum, int newSocketNum);
+  void setBackgroundHandling(int socketNum, int conditionSet, BackgroundHandlerProc* handlerProc, void* clientData) override;
+  void moveSocketHandling(int oldSocketNum, int newSocketNum) override;
 
 protected:
   unsigned fMaxSchedulerGranularity;
