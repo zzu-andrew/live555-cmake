@@ -91,7 +91,7 @@ public:
   void* groupsockPriv;  //_ _groupsockPriv
 
 protected:
-  UsageEnvironment(TaskScheduler& scheduler); // abstract base class
+  explicit UsageEnvironment(TaskScheduler& scheduler); // abstract base class
   virtual ~UsageEnvironment(); // we are deleted only by reclaim()
 
 private:

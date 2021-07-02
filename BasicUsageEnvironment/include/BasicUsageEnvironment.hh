@@ -29,18 +29,18 @@ public:
   static BasicUsageEnvironment* createNew(TaskScheduler& taskScheduler);
 
   // redefined virtual functions:
-  virtual int getErrno() const;
+  int getErrno() const override;
 
-  virtual UsageEnvironment& operator<<(char const* str);
-  virtual UsageEnvironment& operator<<(int i);
-  virtual UsageEnvironment& operator<<(unsigned u);
-  virtual UsageEnvironment& operator<<(double d);
-  virtual UsageEnvironment& operator<<(void* p);
+  UsageEnvironment& operator<<(char const* str) final;
+  UsageEnvironment& operator<<(int i) final;
+  UsageEnvironment& operator<<(unsigned u) final;
+  UsageEnvironment& operator<<(double d) final;
+  UsageEnvironment& operator<<(void* p) final;
 
 protected:
-  BasicUsageEnvironment(TaskScheduler& taskScheduler);
+  explicit BasicUsageEnvironment(TaskScheduler& taskScheduler);
       // called only by "createNew()" (or subclass constructors)
-  virtual ~BasicUsageEnvironment();
+  ~BasicUsageEnvironment() override;
 };
 
 
@@ -51,7 +51,7 @@ public:
     // returning to the event loop to handle non-socket or non-timer-based events, such as 'triggered events'.
     // You can change this is you wish (but only if you know what you're doing!), or set it to 0, to specify no such maximum time.
     // (You should set it to 0 only if you know that you will not be using 'event triggers'.)
-  virtual ~BasicTaskScheduler();
+  ~BasicTaskScheduler() override;
 
 protected:
     // 单个参数的构造函数要阻止隐式转换

@@ -73,8 +73,8 @@ class HandlerSet; // forward
 // (e.g., to redefine the implementation of socket event handling)
 class BasicTaskScheduler0: public TaskScheduler {
 public:
-  virtual ~BasicTaskScheduler0();
-
+  ~BasicTaskScheduler0() override;
+    // 绝对不要再继承的时候重新定义默认缺省参数的值，因为缺省参数是静态绑定的，而继承的虚函数函数是动态调用的
   virtual void SingleStep(unsigned maxDelayTime = 0) = 0;
       // "maxDelayTime" is in microseconds.  It allows a subclass to impose a limit
       // on how long "select()" can delay, in case it wants to also do polling.
@@ -82,15 +82,15 @@ public:
 
 public:
   // Redefined virtual functions:
-  virtual TaskToken scheduleDelayedTask(int64_t microseconds, TaskFunc* proc,
-				void* clientData);
-  virtual void unscheduleDelayedTask(TaskToken& prevTask);
+  TaskToken scheduleDelayedTask(int64_t microseconds, TaskFunc* proc,
+				void* clientData) override;
+  void unscheduleDelayedTask(TaskToken& prevTask) override;
 
-  virtual void doEventLoop(char volatile* watchVariable);
+  void doEventLoop(char volatile* watchVariable) override;
 
-  virtual EventTriggerId createEventTrigger(TaskFunc* eventHandlerProc);
-  virtual void deleteEventTrigger(EventTriggerId eventTriggerId);
-  virtual void triggerEvent(EventTriggerId eventTriggerId, void* clientData = NULL);
+  EventTriggerId createEventTrigger(TaskFunc* eventHandlerProc) override;
+  void deleteEventTrigger(EventTriggerId eventTriggerId) override;
+  void triggerEvent(EventTriggerId eventTriggerId, void* clientData = nullptr) override;
 
 protected:
   BasicTaskScheduler0();

@@ -21,7 +21,7 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 
 Boolean UsageEnvironment::reclaim() {
   // We delete ourselves only if we have no remainining state:
-  if (liveMediaPriv == NULL && groupsockPriv == NULL) {
+  if (liveMediaPriv == nullptr && groupsockPriv == nullptr) {
     delete this;
     return True;
   }
@@ -30,11 +30,10 @@ Boolean UsageEnvironment::reclaim() {
 }
 
 UsageEnvironment::UsageEnvironment(TaskScheduler& scheduler)
-  : liveMediaPriv(NULL), groupsockPriv(NULL), fScheduler(scheduler) {
+  : liveMediaPriv(nullptr), groupsockPriv(nullptr), fScheduler(scheduler) {
 }
 
-UsageEnvironment::~UsageEnvironment() {
-}
+UsageEnvironment::~UsageEnvironment() = default;
 
 // By default, we handle 'should not occur'-type library errors by calling abort().  Subclasses can redefine this, if desired.
 // (If your runtime library doesn't define the "abort()" function, then define your own (e.g., that does nothing).)
@@ -43,11 +42,9 @@ void UsageEnvironment::internalError() {
 }
 
 
-TaskScheduler::TaskScheduler() {
-}
+TaskScheduler::TaskScheduler() = default;
 
-TaskScheduler::~TaskScheduler() {
-}
+TaskScheduler::~TaskScheduler() = default;
 
 void TaskScheduler::rescheduleDelayedTask(TaskToken& task,
 					  int64_t microseconds, TaskFunc* proc,
