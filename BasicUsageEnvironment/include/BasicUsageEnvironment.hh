@@ -54,7 +54,8 @@ public:
   virtual ~BasicTaskScheduler();
 
 protected:
-  BasicTaskScheduler(unsigned maxSchedulerGranularity);
+    // 单个参数的构造函数要阻止隐式转换
+  explicit BasicTaskScheduler(unsigned maxSchedulerGranularity);
       // called only by "createNew()"
 
   static void schedulerTickTask(void* clientData);
@@ -72,15 +73,10 @@ protected:
 
   // To implement background operations:
   int fMaxNumSockets;
-  fd_set fReadSet;
-  fd_set fWriteSet;
-  fd_set fExceptionSet;
+  fd_set fReadSet{};
+  fd_set fWriteSet{};
+  fd_set fExceptionSet{};
 
-private:
-#if defined(__WIN32__) || defined(_WIN32)
-  // Hack to work around a bug in Windows' "select()" implementation:
-  int fDummySocketNum;
-#endif
 };
 
 #endif

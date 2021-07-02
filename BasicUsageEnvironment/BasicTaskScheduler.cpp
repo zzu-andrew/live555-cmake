@@ -34,9 +34,6 @@ BasicTaskScheduler* BasicTaskScheduler::createNew(unsigned maxSchedulerGranulari
 
 BasicTaskScheduler::BasicTaskScheduler(unsigned maxSchedulerGranularity)
   : fMaxSchedulerGranularity(maxSchedulerGranularity), fMaxNumSockets(0)
-#if defined(__WIN32__) || defined(_WIN32)
-  , fDummySocketNum(-1)
-#endif
 {
   FD_ZERO(&fReadSet);
   FD_ZERO(&fWriteSet);
@@ -45,11 +42,7 @@ BasicTaskScheduler::BasicTaskScheduler(unsigned maxSchedulerGranularity)
   if (maxSchedulerGranularity > 0) schedulerTickTask(); // ensures that we handle events frequently
 }
 
-BasicTaskScheduler::~BasicTaskScheduler() {
-#if defined(__WIN32__) || defined(_WIN32)
-  if (fDummySocketNum >= 0) closeSocket(fDummySocketNum);
-#endif
-}
+BasicTaskScheduler::~BasicTaskScheduler() = default;
 
 void BasicTaskScheduler::schedulerTickTask(void* clientData) {
   ((BasicTaskScheduler*)clientData)->schedulerTickTask();
@@ -69,7 +62,7 @@ void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) {
   fd_set exceptionSet = fExceptionSet; // ditto
 
   DelayInterval const& timeToDelay = fDelayQueue.timeToNextAlarm();
-  struct timeval tv_timeToDelay;
+  struct timeval tv_timeToDelay{};
   tv_timeToDelay.tv_sec = timeToDelay.seconds();
   tv_timeToDelay.tv_usec = timeToDelay.useconds();
   // Very large "tv_sec" values cause select() to fail.
@@ -89,23 +82,10 @@ void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) {
 
   int selectResult = select(fMaxNumSockets, &readSet, &writeSet, &exceptionSet, &tv_timeToDelay);
   if (selectResult < 0) {
-#if defined(__WIN32__) || defined(_WIN32)
-    int err = WSAGetLastError();
-    // For some unknown reason, select() in Windoze sometimes fails with WSAEINVAL if
-    // it was called with no entries set in "readSet".  If this happens, ignore it:
-    if (err == WSAEINVAL && readSet.fd_count == 0) {
-      err = EINTR;
-      // To stop this from happening again, create a dummy socket:
-      if (fDummySocketNum >= 0) closeSocket(fDummySocketNum);
-      fDummySocketNum = socket(AF_INET, SOCK_DGRAM, 0);
-      FD_SET((unsigned)fDummySocketNum, &fReadSet);
-    }
-    if (err != EINTR) {
-#else
+
     if (errno != EINTR && errno != EAGAIN) {
-#endif
 	// Unexpected error - treat this as fatal:
-#if !defined(_WIN32_WCE)
+
 	perror("BasicTaskScheduler::SingleStep(): select() fails");
 	// Because this failure is often "Bad file descriptor" - which is caused by an invalid socket number (i.e., a socket number
 	// that had already been closed) being used in "select()" - we print out the sockets that were being used in "select()",
@@ -121,7 +101,6 @@ void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) {
 	  }
 	}
 	fprintf(stderr, "\n");
-#endif
 	internalError();
       }
   }
@@ -154,11 +133,11 @@ void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) {
       break;
     }
   }
-  if (handler == NULL && fLastHandledSocketNum >= 0) {
+  if (handler == nullptr && fLastHandledSocketNum >= 0) {
     // We didn't call a handler, but we didn't get to check all of them,
     // so try again from the beginning:
     iter.reset();
-    while ((handler = iter.next()) != NULL) {
+    while ((handler = iter.next()) != nullptr) {
       int sock = handler->socketNum; // alias
       int resultConditionSet = 0;
       if (FD_ISSET(sock, &readSet) && FD_ISSET(sock, &fReadSet)/*sanity check*/) resultConditionSet |= SOCKET_READABLE;
@@ -172,7 +151,7 @@ void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) {
 	break;
       }
     }
-    if (handler == NULL) fLastHandledSocketNum = -1;//because we didn't call a handler
+    if (handler == nullptr) fLastHandledSocketNum = -1;//because we didn't call a handler
   }
 
   // Also handle any newly-triggered event (Note that we do this *after* calling a socket handler,
@@ -196,7 +175,7 @@ void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) {
 
 	if ((fTriggersAwaitingHandling&mask) != 0) {
 	  fTriggersAwaitingHandling &=~ mask;
-	  if (fTriggeredEventHandlers[i] != NULL) {
+	  if (fTriggeredEventHandlers[i] != nullptr) {
 	    (*fTriggeredEventHandlers[i])(fTriggeredEventClientDatas[i]);
 	  }
 
