@@ -39,29 +39,29 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 class BasicUsageEnvironment0: public UsageEnvironment {
 public:
   // redefined virtual functions:
-  virtual MsgString getResultMsg() const;
+  MsgString getResultMsg() const override;
 
-  virtual void setResultMsg(MsgString msg);
-  virtual void setResultMsg(MsgString msg1,
-		    MsgString msg2);
-  virtual void setResultMsg(MsgString msg1,
+  void setResultMsg(MsgString msg) override;
+  void setResultMsg(MsgString msg1,
+		    MsgString msg2) override;
+  void setResultMsg(MsgString msg1,
 		    MsgString msg2,
-		    MsgString msg3);
-  virtual void setResultErrMsg(MsgString msg, int err = 0);
+		    MsgString msg3) override;
+  void setResultErrMsg(MsgString msg, int err = 0) override;
 
-  virtual void appendToResultMsg(MsgString msg);
+  void appendToResultMsg(MsgString msg) override;
 
-  virtual void reportBackgroundError();
+  void reportBackgroundError() override;
 
 protected:
-  BasicUsageEnvironment0(TaskScheduler& taskScheduler);
-  virtual ~BasicUsageEnvironment0();
+  explicit BasicUsageEnvironment0(TaskScheduler& taskScheduler);
+  ~BasicUsageEnvironment0() override;
 
 private:
   void reset();
 
-  char fResultMsgBuffer[RESULT_MSG_BUFFER_MAX];
-  unsigned fCurBufferSize;
+  char fResultMsgBuffer[RESULT_MSG_BUFFER_MAX]{};
+  unsigned fCurBufferSize{};
   unsigned fBufferMaxSize;
 };
 

@@ -18,27 +18,17 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 // Implementation
 
 #include "BasicUsageEnvironment.hh"
-#include <stdio.h>
+#include <cstdio>
 
 ////////// BasicUsageEnvironment //////////
 
-#if defined(__WIN32__) || defined(_WIN32)
-extern "C" int initializeWinsockIfNecessary();
-#endif
 
 BasicUsageEnvironment::BasicUsageEnvironment(TaskScheduler& taskScheduler)
 : BasicUsageEnvironment0(taskScheduler) {
-#if defined(__WIN32__) || defined(_WIN32)
-  if (!initializeWinsockIfNecessary()) {
-    setResultErrMsg("Failed to initialize 'winsock': ");
-    reportBackgroundError();
-    internalError();
-  }
-#endif
+
 }
 
-BasicUsageEnvironment::~BasicUsageEnvironment() {
-}
+BasicUsageEnvironment::~BasicUsageEnvironment() = default;
 
 BasicUsageEnvironment*
 BasicUsageEnvironment::createNew(TaskScheduler& taskScheduler) {
@@ -46,15 +36,11 @@ BasicUsageEnvironment::createNew(TaskScheduler& taskScheduler) {
 }
 
 int BasicUsageEnvironment::getErrno() const {
-#if defined(__WIN32__) || defined(_WIN32) || defined(_WIN32_WCE)
-  return WSAGetLastError();
-#else
   return errno;
-#endif
 }
 
 UsageEnvironment& BasicUsageEnvironment::operator<<(char const* str) {
-  if (str == NULL) str = "(NULL)"; // sanity check
+  if (str == nullptr) str = "(NULL)"; // sanity check
   fprintf(stderr, "%s", str);
   return *this;
 }
